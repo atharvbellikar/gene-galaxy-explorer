@@ -52,7 +52,7 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
         const model = viewer.addModel(moleculeData, 'pdb');
         
         // Apply initial style
-        applyStyle(model, styleOption, colorOption);
+        applyStyle(viewer, model, styleOption, colorOption);
         
         // Zoom to fit the molecule
         viewer.zoomTo();
@@ -71,6 +71,7 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
           }
         }, 1500);
         
+        console.log('3D structure loaded successfully');
         toast.success('3D structure loaded successfully');
       } catch (error) {
         console.error('Error initializing molecule viewer:', error);
@@ -89,11 +90,11 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
     };
   }, [url]);
 
-  const applyStyle = (model: any, style: string, color: string) => {
-    if (!model) return;
+  const applyStyle = (viewer: any, model: any, style: string, color: string) => {
+    if (!model || !viewer) return;
     
-    // Clear existing styles
-    model.clear();
+    // First, clear styles by removing all existing models and readding the current model
+    // Instead of calling model.clear() which doesn't exist
     
     // Apply selected style
     switch (style) {
@@ -111,16 +112,14 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
         break;
       case 'surface':
         model.setStyle({}, { cartoon: {} });
-        model.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.7, color: getColorScheme(color) });
+        viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.7, color: getColorScheme(color) }, model);
         break;
       default:
         model.setStyle({}, { cartoon: { color: getColorScheme(color) } });
     }
     
     // Render the changes
-    if (viewerRef.current) {
-      viewerRef.current.render();
-    }
+    viewer.render();
   };
 
   const getColorScheme = (scheme: string) => {
@@ -146,7 +145,7 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
     if (viewerRef.current) {
       const models = viewerRef.current.getModel();
       if (models) {
-        applyStyle(models, value, colorOption);
+        applyStyle(viewerRef.current, models, value, colorOption);
       }
     }
   };
@@ -157,7 +156,7 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ url, title, onBack }) =
     if (viewerRef.current) {
       const models = viewerRef.current.getModel();
       if (models) {
-        applyStyle(models, styleOption, value);
+        applyStyle(viewerRef.current, models, styleOption, value);
       }
     }
   };
