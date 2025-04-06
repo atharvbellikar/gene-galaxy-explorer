@@ -5,6 +5,7 @@ import GeneList from '@/components/GeneList';
 import GeneDetail from '@/components/GeneDetail';
 import MoleculeViewer from '@/components/MoleculeViewer';
 import EmptyState from '@/components/EmptyState';
+import DiseasesByRegion from '@/components/DiseasesByRegion'; // Add this import
 import { Gene, ViewMode } from '@/lib/types';
 import { mockGenes, filterGenes } from '@/lib/gene-data';
 import { toast } from 'sonner';
@@ -60,6 +61,11 @@ const Index = () => {
             onSelectGene={handleSelectGene}
             selectedGeneId={selectedGene?.id}
           />
+          
+          {/* Add the diseases by region component to the sidebar */}
+          <div className="mt-4 h-96">
+            <DiseasesByRegion genes={genes} />
+          </div>
         </div>
         
         {/* Main content area */}
