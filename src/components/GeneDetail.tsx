@@ -103,8 +103,8 @@ const GeneDetail: React.FC<GeneDetailProps> = ({ gene, onBack, onViewStructure }
                   <div className="flex items-center gap-2 mb-2">
                     <Badge 
                       variant={
-                        gene.expression.level === 'high' ? 'success' :
-                        gene.expression.level === 'medium' ? 'warning' : 'secondary'
+                        gene.expression.level === 'high' ? 'default' :
+                        gene.expression.level === 'medium' ? 'secondary' : 'outline'
                       }
                     >
                       {gene.expression.level} expression
@@ -129,7 +129,7 @@ const GeneDetail: React.FC<GeneDetailProps> = ({ gene, onBack, onViewStructure }
                   <h3 className="text-sm font-medium mb-2">Associated Diseases</h3>
                   <div className="flex flex-wrap gap-1">
                     {gene.diseases.map((disease, i) => (
-                      <Badge key={i} variant="destructive" className="badge-danger">{disease}</Badge>
+                      <Badge key={i} variant="destructive">{disease}</Badge>
                     ))}
                   </div>
                 </>
